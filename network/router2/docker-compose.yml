@@ -1,0 +1,21 @@
+version: "2"
+
+services:
+
+  router2:
+    image: mongo:3.4.2
+    container_name: router2
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27018:27017
+    command: mongos --configdb rs1-cfgsrv1/configserver1:27017 --port 27017
+    networks:
+      - nw_sharding
+      - nw_mongodb
+
+networks:
+  nw_sharding:
+    external: true
+  nw_mongodb:
+    external: true

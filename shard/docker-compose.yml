@@ -1,0 +1,108 @@
+version: "2"
+services:
+  # replication set 1
+  rs1_shard1_1: #primary
+    image: mongo:latest
+    container_name: rs1_shard1_1
+    hostname: rs1_shard1_1
+    volumes:
+      - ./data/db/rs1_shard1_1:/data/db
+    ports:
+      - 27021:27017
+    command: mongod --replSet rs1-shard --shardsvr --port 27017
+
+  rs1_shard1_2: #secondary
+    image: mongo:latest
+    container_name: rs1_shard1_2
+    hostname: rs1_shard1_2
+    volumes:
+      - ./data/db/rs1_shard1_2:/data/db
+    ports:
+      - 27022:27017
+    command: mongod --replSet rs1-shard --shardsvr --port 27017
+
+  rs1_shard1_3: #arbiter
+    image: mongo:latest
+    container_name: rs1_shard1_3
+    hostname: rs1_shard1_3
+    volumes:
+      - ./data/db/rs1_shard1_3:/data/db
+    ports:
+      - 27023:27017
+    command: mongod --replSet rs1-shard --shardsvr --port 27017
+
+  # replication set 2
+  rs2_shard2_1: #primary
+    image: mongo:latest
+    container_name: rs2_shard2_1
+    hostname: rs2_shard2_1
+    volumes:
+      - ./data/db/rs2_shard2_1:/data/db
+    ports:
+      - 27031:27017
+    command: mongod --replSet rs2-shard --shardsvr --port 27017
+
+  rs2_shard2_2: #secondary
+    image: mongo:latest
+    container_name: rs2_shard2_2
+    hostname: rs2_shard2_2
+    volumes:
+      - ./data/db/rs2_shard2_2:/data/db
+    ports:
+      - 27032:27017
+    command: mongod --replSet rs2-shard --shardsvr --port 27017
+
+  rs2_shard2_3: #arbiter
+    image: mongo:latest
+    container_name: rs2_shard2_3
+    hostname: rs2_shard2_3
+    volumes:
+      - ./data/db/rs2_shard2_3:/data/db
+    ports:
+      - 27033:27017
+    command: mongod --replSet rs2-shard --shardsvr --port 27017
+
+  config1:
+    image: mongo:latest
+    container_name: config1
+    hostname: config1
+    volumes:
+      - ./data/db/config:/data/db
+    ports:
+      - 27041:27017
+    command: mongod --replSet rs1-cfgsrv --rest --configsvr --dbpath /data/db --port 27017
+
+  router1:
+    image: mongo:latest
+    container_name: router1
+    hostname: router1
+    volumes:
+      - ./data/db/router:/data/db
+    ports:
+      - 27017:27017
+    command: mongos --configdb rs1-cfgsrv/config1:27017 --port 27017
+
+  apache2:
+    image: yoprogrammer:php1
+    volumes:
+      - ./php/src:/var/www/html
+    ports:
+      - 8080:80
+    links:
+      - router1:mongo
+
+  nginx:
+    image: yoprogrammer:nginx
+    ports:
+      - 8081:80
+    volumes:
+      - ./php/src:/var/www/html
+    links:
+      - php
+
+  php:
+    image: yoprogrammer:php-fpm
+    volumes:
+      - ./php/src:/var/www/html
+    links:
+      - router1:mongo

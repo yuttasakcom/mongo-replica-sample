@@ -1,0 +1,21 @@
+version: "2"
+
+services:
+
+  configserver1:
+    image: mongo:3.4.2
+    container_name: configserver1
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27041:27017
+    networks:
+      - nw_configserver
+      - nw_sharding
+    command: mongod --replSet rs1-cfgsrv1 --rest --configsvr --dbpath /data/db --port 27017
+
+networks:
+  nw_configserver:
+    external: true
+  nw_sharding:
+    external: true

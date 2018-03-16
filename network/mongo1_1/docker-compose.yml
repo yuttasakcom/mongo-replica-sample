@@ -1,0 +1,22 @@
+version: "2"
+
+services:
+
+  mongo1_1:
+    image: mongo:3.4.2
+    container_name: mongo1_1
+    hostname: mongo1_1
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27021:27017
+    command: mongod --replSet rs1 --shardsvr --port 27017
+    networks:
+      - nw_mongo1
+      - nw_sharding
+
+networks:
+  nw_mongo1:
+    external: true
+  nw_sharding:
+    external: true

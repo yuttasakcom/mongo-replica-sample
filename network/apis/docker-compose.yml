@@ -1,0 +1,29 @@
+version: "2"
+
+services:
+
+  nginx:
+    image: yoprogrammer:nginx
+    container_name: nginx
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - 80:80
+    networks:
+      - nw_apis
+      - nw_mongodb
+
+  php:
+    image: yoprogrammer:php-fpm
+    container_name: php
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - nw_apis
+      - nw_mongodb
+
+networks:
+  nw_apis:
+    external: true
+  nw_mongodb:
+    external: true

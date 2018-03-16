@@ -1,0 +1,18 @@
+version: "2"
+
+services:
+
+  arbiter_mongo2:
+    image: mongo:3.4.2
+    container_name: arbiter_mongo2
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27033:27017
+    command: mongod --replSet rs2
+    networks:
+      - nw_mongo2
+
+networks:
+  nw_mongo2:
+    external: true
