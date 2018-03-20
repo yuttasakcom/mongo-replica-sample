@@ -1,0 +1,52 @@
+version: '3.5'
+
+services:
+
+  mongo1_1:
+    image: mongo:3.6.3
+    container_name: mongo1_1
+    deploy:
+      labels:
+        name: 'node1'
+    volumes:
+      - mongo1_db:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --replSet rs1 --port 27017
+    networks:
+      - mongo1_net
+
+  mongo1_2:
+    image: mongo:3.6.3
+    container_name: mongo1_2
+    deploy:
+      labels:
+        name: 'node2'
+    volumes:
+      - mongo1_db:/data/db
+    ports:
+      - 27018:27017
+    command: mongod --replSet rs1 --port 27017
+    networks:
+      - mongo1_net
+
+  mongo1_arbiter:
+    image: mongo:3.6.3
+    container_name: mongo1_arbiter
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    volumes:
+      - mongo1_db:/data/db
+    command: mongod --replSet rs1
+    networks:
+      - mongo1_net
+
+volumes:
+  mongo1_db:
+    driver: local
+
+networks:
+  mongo1_net:
+    external: true

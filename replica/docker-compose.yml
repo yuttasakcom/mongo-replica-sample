@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  mongo1_1:
+    image: mongo:3.6.3
+    container_name: mongo1_1
+    volumes:
+      - /data/mongo1_1:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --replSet rs1 --port 27017
+
+  mongo1_2:
+    image: mongo:3.6.3
+    container_name: mongo1_2
+    volumes:
+      - /data/mongo1_2:/data/db
+    ports:
+      - 27018:27017
+    command: mongod --replSet rs1 --port 27017
+
+  mongo1_arbiter:
+    image: mongo:3.6.3
+    container_name: mongo1_arbiter
+    volumes:
+      - /data/mongo1_arbiter:/data/db
+    command: mongod --replSet rs1
+
+  
