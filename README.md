@@ -110,3 +110,11 @@ $ db.users.find({name: "a"}).explain("allPlansExecution")
 $ db.users.find({name: "a"}).explain(true)
 $ db.users.find({name: "a"}).explain(false)
 ```
+
+## Group by user Reduce Function
+
+```bash
+$ db.users.group({key: {role: 1}, reduce: function(a, result){ result.sum_age += a.age}, initial:{sum_age: 0}})
+```
+
+## Regular Expression in MongoDB
