@@ -117,4 +117,21 @@ $ db.users.find({name: "a"}).explain(false)
 $ db.users.group({key: {role: 1}, reduce: function(a, result){ result.sum_age += a.age}, initial:{sum_age: 0}})
 ```
 
-## Regular Expression in MongoDB
+## Regular Expression in MongoDB $regex
+
+```bash
+$ db.users.find({name: {$regex: /^a/}})
+$ db.users.find({name: /a/})
+```
+
+## Limit
+
+```bash
+$ db.users.find().limit(1)
+```
+
+## Map-Reduce in MongoDB
+
+```bash
+
+```
