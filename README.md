@@ -78,3 +78,35 @@ $ db.users.find().sort({name: 1}) // 1 asc
 $ db.users.find().sort({age: -1}) // -1 desc
 $ db.users.find().sort({name: 1, age: -1})
 ```
+
+## Data Modeling
+
+* References
+* Embedded Data
+
+## User/Role
+
+## Sorting $natural
+
+```bash
+$ db.users.find().sort({$natural: 1})
+```
+
+## Indexes createIndex, getIndexes, dropIndex
+
+```
+$ db.users.createIndex({name: 1})
+$ db.users.getIndexes()
+$ db.users.dropIndex({name: 1})
+```
+
+## Explain
+
+```bash
+$ db.users.find({name: "a"}).explain()
+$ db.users.find({name: "a"}).explain("queryPlanner")
+$ db.users.find({name: "a"}).explain("executionStats")
+$ db.users.find({name: "a"}).explain("allPlansExecution")
+$ db.users.find({name: "a"}).explain(true)
+$ db.users.find({name: "a"}).explain(false)
+```
